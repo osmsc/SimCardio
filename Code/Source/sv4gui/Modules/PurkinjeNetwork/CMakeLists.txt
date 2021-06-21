@@ -28,6 +28,11 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+include(SimVascularInternals)
+find_library(SV_LIB_MODULE_COMMON_NAME_LIBRARY ${SV_LIB_MODULE_COMMON_NAME} HINTS /Applications/SimVascular.app/Contents/Resources/lib)
+find_library(SV_LIB_MODULE_PROJECTMANAGEMENT_NAME_LIBRARY ${SV_LIB_MODULE_PROJECTMANAGEMENT_NAME} HINTS /Applications/SimVascular.app/Contents/Resources/lib)
+link_directories(/Applications/SimVascular.app/Contents/Resources/lib)
+
 set(lib "_simvascular_module_purkinjenetwork")
 
 ## Create the module.
@@ -44,7 +49,15 @@ simvascular_create_module(
   ${SV_LIB_UTILS_NAME}
   ${SV_LIB_GEOM_NAME}
   ${QT_LIBRARIES}
-  ${SV_LIB_MODULE_COMMON_NAME})
+  ${SV_LIB_MODULE_COMMON_NAME}
+  ${SV_LIB_MODULE_PROJECTMANAGEMENT_NAME})
+
+# trying to force link lib
+message("force link to this lib ${SV_LIB_MODULE_COMMON_NAME}")
+message("force link to this lib ${SV_LIB_MODULE_PROJECTMANAGEMENT_NAME}")
+#target_link_libraries(${lib} ${SV_LIB_MODULE_PROJECTMANAGEMENT_NAME})
+#message("force link to this ${lib} lib_simvascular_module_projectmanagement.dylib")
+#target_link_libraries(${lib} _simvascular_module_projectmanagement)
 
 if(SV_INSTALL_LIBS)
   install(TARGETS ${lib}
@@ -86,8 +99,7 @@ install( TARGETS ${lib}
          DESTINATION lib
          COMPONENT libraries )
 
-install( DIRECTORY "python/fractal-tree"
+install( DIRECTORY "../../../../../Python/site-packages"
          DESTINATION "python"
          COMPONENT python_install
          PATTERN __pycache__/ EXCLUDE ) 
-
